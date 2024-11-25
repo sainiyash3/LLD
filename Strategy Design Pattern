@@ -1,0 +1,46 @@
+public interface DriveStrategy{
+    public void drive();
+}
+public class NormalDrive implements DriveStrategy{
+    @Override
+    public void drive(){
+        System.out.println("Normal drive");
+    }
+}
+public class SpecialDrive implements DriveStrategy{
+    @Override
+    public void drive(){
+        System.out.println("Special drive");
+    }
+}
+
+public class Vehicle{
+    DriveStrategy driveStrategy;
+    
+    Vehicle(DriveStrategy driveStrategy){
+        this.driveStrategy = driveStrategy;
+    }
+    
+    public void drive(){
+        driveStrategy.drive();
+    }
+    
+}
+public class SportyVehicle extends Vehicle{
+    SportyVehicle(){
+        super(new NormalDrive());
+    }
+}
+public class OffroadVehicle extends Vehicle{
+    OffroadVehicle(){
+        super(new SpecialDrive());
+    }
+}
+
+
+class Main {
+  public static void main(String[] args) {
+    Vehicle vehicle = new SportyVehicle();
+    vehicle.drive();
+  }
+}
