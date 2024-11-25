@@ -1,0 +1,108 @@
+import java.util.ArrayList;
+
+// Observable Interface
+public interface WeatherStationObservable {
+    void add(DisplayObserver displayObserver);
+    void remove(DisplayObserver displayObserver);
+    void notifyObservers();
+    void setTemp(int temp);
+    int getTemp();
+}
+
+// Observable Implementation
+public class WeatherStationObservaleClass implements WeatherStationObservable {
+    private ArrayList<DisplayObserver> objList = new ArrayList<>();
+    private int temp = 0;
+
+    @Override
+    public void add(DisplayObserver displayObserver) {
+        objList.add(displayObserver);
+    }
+
+    @Override
+    public void remove(DisplayObserver displayObserver) {
+        objList.remove(displayObserver);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (DisplayObserver obj : objList) {
+            obj.update();
+        }
+    }
+
+    @Override
+    public void setTemp(int temp) {
+        this.temp = temp;
+        notifyObservers();
+    }
+
+    @Override
+    public int getTemp() {
+        return temp;
+    }
+}
+
+// Observer Interface
+public interface DisplayObserver {
+    void update();
+}
+
+// Mobile Display Observer
+public class MobileDisplayObserver implements DisplayObserver {
+    private WeatherStationObservable weatherStationObservable;
+
+    MobileDisplayObserver(WeatherStationObservable weatherStationObservable) {
+        this.weatherStationObservable = weatherStationObservable;
+    }
+
+    @Override
+    public void update() {
+        System.out.println("Mobile Display: Current Temperature is " + weatherStationObservable.getTemp() + "°C");
+    }
+}
+
+// TV Display Observer
+public class TVDisplayObserver implements DisplayObserver {
+    private WeatherStationObservable weatherStationObservable;
+
+    TVDisplayObserver(WeatherStationObservable weatherStationObservable) {
+        this.weatherStationObservable = weatherStationObservable;
+    }
+
+    @Override
+    public void update() {
+        System.out.println("TV Display: Current Temperature is " + weatherStationObservable.getTemp() + "°C");
+    }
+}
+
+// Main Class
+public class Main {
+    public static void main(String[] args) {
+        WeatherStationObservaleClass weatherStation = new WeatherStationObservaleClass();
+
+        // Create Observers
+        MobileDisplayObserver mobileDisplay = new MobileDisplayObserver(weatherStation);
+        TVDisplayObserver tvDisplay = new TVDisplayObserver(weatherStation);
+
+        // Add Observers
+        weatherStation.add(mobileDisplay);
+        weatherStation.add(tvDisplay);
+
+        // Change Temperature
+        System.out.println("Setting temperature to 25°C:");
+        weatherStation.setTemp(25);
+
+        // Change Temperature Again
+        System.out.println("Setting temperature to 30°C:");
+        weatherStation.setTemp(30);
+
+        // Remove TV Display Observer
+        System.out.println("Removing TV Display Observer:");
+        weatherStation.remove(tvDisplay);
+
+        // Change Temperature Again
+        System.out.println("Setting temperature to 20°C:");
+        weatherStation.setTemp(20);
+    }
+}
