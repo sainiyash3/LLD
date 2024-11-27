@@ -1,0 +1,42 @@
+public interface Shape{
+    public void draw();
+}
+public class Square extends Shape{
+    public void draw(){
+        System.out.println("square");
+    }
+}
+public class Rectangle extends Shape{
+    public void draw(){
+        System.out.println("rectangle");
+    }
+}
+public class Circle extends Shape{
+    public void draw(){
+        System.out.println("circle");
+    }
+}
+
+public class ShapeFactory{
+    Shape getShape(String input){
+        switch(input){
+            Case "circle":
+                return new Circle();
+            Case "rectangle":
+                return new Rectangle();
+            Case "square":
+                return new Square();
+            default:
+                return null;
+        }
+    }
+}
+
+class Main {
+  public static void main(String[] args) {
+    ShapeFactory obj = new ShapeFactory();
+    Shape shapeObj = obj.getShape("circle");
+    shapeObj.draw(); // prints circle
+    
+  }
+}
