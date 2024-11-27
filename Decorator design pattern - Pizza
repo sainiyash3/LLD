@@ -1,0 +1,58 @@
+public abstract class BasePizza{
+    public abstract int cost();
+}
+public FarmhousePizza extends BasePizza{
+    @Override
+    public int cost(){
+        return 100;
+    }
+}
+public CountryPizza extends BasePizza{
+    @Override
+    public int cost(){
+        return 110;
+    }
+}
+public MargPizza extends BasePizza{
+    @Override
+    public int cost{
+        return 90;
+    }
+}
+
+public abstract class Toppings extends BasePizza{
+    
+}
+public ExtraCheese extends Toppings{
+    BasePizza basePizza;
+    ExtraCheese(BasePizza basePizza){
+        this.basePizza = basePizza;
+    }
+    @Override
+    public int cost(){
+        return this.basePizza.cost() + 50;
+    }
+}
+public Mushroom extends Toppings{
+    BasePizza basePizza;
+    Mushroom(BasePizza basePizza){
+        this.basePizza = basePizza;
+    }
+    @Override
+    public int cost(){
+        return this.basePizza.cost() + 20;
+    }
+}
+
+class Main {
+  public static void main(String[] args) {
+     //Pizza Marg + extra cheese
+     BasePizza obj = new ExtraCheese(new MargPizza());
+     obj.cost; // 90 + 50 = 140
+     
+     //Pizza Marg + extra cheese + mushrooms
+     BasePizza obj1 = new Mushroom(new ExtraCheese(new MargPizza()));
+     obj1.cost; // 90 + 50 + 20 = 160
+     
+  }
+}
