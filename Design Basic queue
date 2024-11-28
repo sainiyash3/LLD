@@ -1,0 +1,44 @@
+// suppose the operations are around 10 -> keeping array size as 10
+public class CustomQueue{
+    int[] ar;
+    int front;
+    int size;
+    public CustomQueue(){
+        ar = new int[10];
+        front = 0;
+        size = 0;
+    }
+    
+    public int size(){
+        return size;
+    }
+    
+    public void push(int value){
+        if(size == ar.length){
+            System.out.println("Queue overflow");
+        }else{
+            int rear = (front + size) % ar.length;
+            ar[size] = value;
+            size++;
+        }
+    }
+    
+    public int pop(){
+        if(size == 0){
+            System.out.println("Queue underflow");
+        }else{
+            int val = ar[front];
+            front = (front + 1) % ar.length;
+            size--;
+            return val;
+        }
+    }
+    
+    public int peek(){
+        if(size == 0){
+            System.out.println("Queue underflow");
+        }else{
+            return ar[front];
+        }
+    }
+}
