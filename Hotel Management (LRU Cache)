@@ -1,0 +1,73 @@
+// Hotel Management
+// Similar to LRU cache with an expiry time
+class Node{
+    Node prev, next;
+    int key, value, ttl;
+    Node(int key, int value, int ttl){
+        this.key = key;
+        this.value = value;
+        this.ttl = ttl;
+    }
+}
+
+class HotelManagement{
+    
+    Node head, tail;
+    HashMap<Integer, Node> hm;
+    int capacity;
+    
+    HotelManagement(int capacity){
+        head = new Node(0, 0, 0);
+        tail = new Node(0, 0, 0);
+        head.next = tail;
+        tail.prev = head;
+        hm = new HashMap<>();
+        this.capacity = capacity;
+    }
+    
+    public void add(int key, int value, int expTime){
+        if(hm.containsKey(key)){
+            remove(hm.get(key));
+        }
+        if(hm.size() == capacity){
+            checkExpTime();
+        }
+        
+        insert(new Node(key, value, System.currentTimeMillis() + expTime));
+    }
+    
+    public void insert(Node node){ //head x 1
+        hm.put(node.key, node);
+        Node headNext = head.next;
+        head.next = node; //head-x
+        node.prev = head;
+        node.next = headNext; //x-1
+        headNext.prev = node;
+    }
+    
+    public void remove(Node node){
+        hm.remove(node.key);
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+    
+    public void checkExpTime(){ //traverse reverse and check which node has expired ttl and if no one is expired, remove the tail.prev
+        Node curr = tail.prev;
+        while(curr != head){
+            if(System.currentTimeMillis() > curr.ttl){
+                remove(curr);
+                return;
+            }
+            curr = curr.prev;
+        }
+        remove(tail.prev);
+    }
+    
+}
+
+
+class Main {
+  public static void main(String[] args) {
+    System.out.println("Hello Geek!");
+  }
+}
