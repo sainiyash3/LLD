@@ -1,0 +1,72 @@
+//DLL and HashMap - Remove and add in the front. front has recently used and end has least recently used.
+DLL remove() and insert() are in O(1) so get() and put() are in O(1)
+class Node{
+    Node prev, next;
+    int key, value, ttl;
+    Node(int key, int value, int ttl){
+        this.key = key;
+        this.value = value;
+        this.ttl = ttl;
+    }
+}
+class LRUCache {
+    Node head = new Node(0, 0);
+    Node tail = new Node(0,0);
+    HashMap<Integer, Node> hm;
+    int cap;
+    public LRUCache(int capacity) {
+        this.cap = capacity;
+        hm = new HashMap<>();
+        head.next = tail;
+        tail.prev = head;
+    }
+    
+    public int get(int key) {
+        if(hm.containsKey(key)){
+            Node node = hm.get(key); // remove the node and add it in the front 
+            if(System.currentTimeMillis() > node.ttl){ //node has expired
+                remove(node);
+                return -1;
+            }
+            remove(node);
+            insert(node);
+            return node.value;
+        }else{
+            return -1;
+        }
+    }
+    
+    public void put(int key, int value) {
+        if(hm.containsKey(key)){ // remove and add in the front
+            remove(hm.get(key));
+        }
+        if(hm.size() == cap){ //when cap is full, u remove the least used that is towards the end
+            remove(tail.prev);
+        }
+        insert(new Node(key, value, System.currentTimeMillis() + ttl)); //Adding after the head to keep track of freq used and the nodes in end are least used
+    }
+
+    public void insert(Node node){
+        hm.put(node.key, node);
+        Node headNext = head.next; //inserting after head so this gets the 2 element in DLL
+        //Adding the node after head
+        head.next = node;
+        node.prev = head;
+        //attaching the new node with 2 element
+        node.next = headNext;
+        headNext.prev = node;
+    }
+
+    public void remove(Node node){ 
+        hm.remove(node.key);
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+}
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
