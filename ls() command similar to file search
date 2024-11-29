@@ -1,0 +1,48 @@
+public interface FileSystem{
+    public void ls();
+}
+
+public class File implements FileSystem{
+    String name;
+    
+    File(String name){
+        this.name = name;
+    }
+    
+    @Override
+    public void ls(){
+        System.out.println("File name: " + name);
+    }
+}
+
+public class Directory implements FileSystem{
+    String dName;
+    List<FileSystem> fileSystemList;
+    
+    Directory(String dName){
+        this.dName = dName;
+        fileSystemList = new ArrayList<>();
+    }
+    
+    public void add(FileSystem fileSystemObj){
+        fileSystemList.add(fileSystemObj);
+    }
+    
+    @Override
+    public void ls(){
+        System.out.println("Directory name: " + dName);
+        for(FileSystem obj : fileSystemList){
+            obj.ls();
+        }
+    }
+    
+}
+// Movie -> Anime -> luffy
+class Main {
+    Directory directoryObj = new Directory("Movie"); 
+    Directory subDirectoryObj = new Directory("Anime");
+    File fileObj = new File("Luffy");
+    subDirectoryObj.add(fileObj);
+    directoryObj.add(subDirectoryObj);
+    directoryObj.ls();
+}
