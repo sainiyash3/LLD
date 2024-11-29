@@ -1,0 +1,99 @@
+// File Search API by extension and size > 5MB
+
+public interface FileSystem{
+    public List<FileSystem> searchBySize(int size);
+    public List<FileSystem> searchByExtension(String extension);
+}
+
+public class File implements FileSystem{
+    String name;
+    int size;
+    String extension;
+    
+    File(String name, int size, String extension){
+        this.name = name;
+        this.size = size;
+        this.extension = extension;
+    }
+    
+    @Override
+    public List<FileSystem> searchBySize(int size){
+        List<FileSystem> result = new ArrayList<>();
+        if(this.size > size){
+            result.add(this);
+        }
+        return result;
+    }
+    
+    @Override
+    public List<FileSystem> searchByExtension(String extension){
+        List<FileSystem> result = new ArrayList<>();
+        if(this.extension.equals(extension)){
+            result.add(this);
+        }
+        return result;
+    }
+    
+}
+
+public class Directory implements FileSystem{
+    String name;
+    List<FileSystem> fileSystemList;
+    
+    Directory(String name){
+        this.name = name;
+        fileSystemList = new ArrayList<>();
+    }
+    
+    public void add(FileSystem obj){
+        fileSystemList.add(obj);
+    }
+    
+    @Override
+    public List<FileSystem> searchBySize(int size){
+        List<FileSystem> result = new ArrayList<>();
+        for(FileSystem fs : fileSystemList){
+            result.addAll(fs.searchBySize(size));
+        }
+        return result;
+    }
+    
+    @Override
+    public List<FileSystem> searchByExtension(String extension){
+        List<FileSystem> result = new ArrayList<>();
+        for(FileSystem fs : fileSystemList){
+            result.addAll(fs.searchByExtension(extension));
+        }
+        return result;
+    }
+    
+}
+
+
+class Main {
+  public static void main(String[] args) {
+    Directory directoryObj = new Directory("C");
+    
+    Directory subDirectoryObj1 = new Directory("Java");
+    Directory subDirectoryObj2 = new Directory("Net");
+    
+    File fileObj1 = new File("Y.mp4", 5000000, "mp4");
+    File fileObj2 = new File("A.pdf", 6000000, "pdf");
+    File fileObj3 = new File("S.mp4", 5000000, "mp4");
+    File fileObj4 = new File("H.pdf", 2000000, "pdf");
+    
+    subDirectoryObj1.add(fileObj1);
+    subDirectoryObj1.add(fileObj2);
+    
+    subDirectoryObj2.add(fileObj3);
+    subDirectoryObj2.add(fileObj4);
+    
+    directoryObj.add(subDirectoryObj1);
+    directoryObj.add(subDirectoryObj2);
+    
+    List<FileSystem> ansSize = directoryObj.searchBySize(40000);
+    
+    List<FileSystem> ansExntension = directoryObj.searchByExtension("pdf");
+    
+  }
+}
