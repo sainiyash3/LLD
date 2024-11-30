@@ -1,0 +1,9 @@
+Approach is same as LRU just see the node class
+class Song {
+    String name;
+    Song prev, next;
+
+    Song(String name) {
+        this.name = name;
+    }
+}
