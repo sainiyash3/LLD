@@ -1,0 +1,54 @@
+import java.util.*;
+
+class Order{
+    String base; 
+    String size;
+    int topping;
+    public Order(String base, String size, int topping){
+        //tell this lowercase for handling
+        this.base = base.toLowerCase();
+        this.size = size.toLowerCase();;
+        this.topping = topping;
+    }
+}
+class Main { 
+    //For one order
+    private static double calPrice(String base, String size, int topping){
+        HashMap<String, Double> basePrices = new HashMap<>();
+        basePrices.put("thin crust", 10.0);
+        basePrices.put("regular", 12.0);
+        basePrices.put("cheese burst", 13.0);
+        
+        HashMap<String, Double> sizePrices = new HashMap<>();
+        basePrices.put("medium", 10.0);
+        basePrices.put("large", 15.0);
+        basePrices.put("extra large", 20.0);
+        
+        double toppingPrice = 2.0;
+        //tell this getOrDefault() if it does not match
+        double price = basePrices.getOrDefault(base, 1.0) * sizePrices.getOrDefault(size, 1.0) + (topping * toppingPrice);
+        return price;
+    }
+    //For handling mutilple orders
+    private static double calPriceMultiple(ArrayList<Order> orders){
+        double price = 0.0;
+        for(Order or : orders){
+            price += calPrice(or.base, or.size, or.topping);
+        }
+        return price;
+    }
+    
+  public static void main(String[] args) {
+      //handling mutilple orders
+      ArrayList<Order> list = new ArrayList<>();
+      Order order1 = new Order("regular", "extra large", 10);
+      Order order2 = new Order("cheese burst", "medium", 5);
+      list.add(order1);
+      list.add(order2);
+      double price = calPriceMultiple(list);
+      
+      //single order
+    // double price = calPrice("regular", "extra large", 10);
+    System.out.println(price);
+  }
+}
